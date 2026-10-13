@@ -176,7 +176,9 @@ def _as_rust_lexer_matcher(lexer_matcher: LexerType, dialect: str, is_subdivide=
 
     if lexer_class == "StringLexer":
         rust_fn = "string_lexer"
-        template = f'"{lexer_matcher.template}"'
+        # A plain Rust string literal, so backslashes and quotes need escaping.
+        escaped = lexer_matcher.template.replace("\\", "\\\\").replace('"', '\\"')
+        template = f'"{escaped}"'
         fallback = ""
         is_match_valid = ""
     elif lexer_class == "RegexLexer":
